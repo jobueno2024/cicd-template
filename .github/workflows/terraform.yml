@@ -33,13 +33,6 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: 'projects/${{ secrets.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-pool-2/providers/github-provider'
-          service_account: '${{ secrets.SERVICE_ACCOUNT_EMAIL }}'
-
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
-        with:
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
 
