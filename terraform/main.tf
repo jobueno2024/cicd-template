@@ -2,7 +2,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 4.0"
+      version = "~> 5.0"
     }
   }
 }
@@ -30,29 +30,30 @@ resource "google_iam_workload_identity_pool_provider" "github_provider" {
     "google.subject"       = "assertion.sub"
     "attribute.actor"      = "assertion.actor"
     "attribute.repository" = "assertion.repository"
-    "attribute.ref"        = "assertion.ref"
   }
 
   oidc {
     issuer_uri = "https://token.actions.githubusercontent.com"
   }
 
-  attribute_condition = "assertion.repository == \"${var.github_repository}\""
+  attribute_condition = format("assertion.repository==\"%s\"", var.github_repository)
 }
 
 # サービスアカウントの作成
 resource "google_service_account" "github_actions" {
   account_id   = "github-actions"
-  display_name = "Service Account for GitHub Actions"
-  description  = "Used by GitHub Actions to deploy to Google Cloud"
+  display_name = "GitHub Actions Service Account"
+  description  = "Service account for GitHub Actions"
 }
 
-# Workload Identity User role の設定
+# Workload Identity User ロールの付与
 resource "google_service_account_iam_binding" "workload_identity_user" {
   service_account_id = google_service_account.github_actions.name
   role               = "roles/iam.workloadIdentityUser"
-
-  members = [
-    "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github_repository}"
+  members            = [
+    format("principalSet://iam.googleapis.com/%s/attribute.repository/%s",
+      google_iam_workload_identity_pool.github_pool.name,
+      var.github_repository
+    )
   ]
 }
