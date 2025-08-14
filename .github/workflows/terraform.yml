@@ -40,10 +40,14 @@ jobs:
       - name: Terraform Plan
         working-directory: ${{ env.TF_WORKING_DIR }}
         if: github.event_name == 'pull_request'
+        env:
+          TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
         run: terraform plan -no-color
         continue-on-error: true
 
       - name: Terraform Apply
         working-directory: ${{ env.TF_WORKING_DIR }}
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
         run: terraform apply -auto-approve
