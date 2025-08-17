@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - features/gc-minimum2
 jobs:
   deploy:
     runs-on: ubuntu-latest
