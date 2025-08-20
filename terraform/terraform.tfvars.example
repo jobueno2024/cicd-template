@@ -1,0 +1,5 @@
+project_id        = "your-gcp-project-id"     # ここにあなたのGCPプロジェクトIDを設定してください
+region            = "asia-northeast1"         # 使用するGCPリージョン
+zone              = "asia-northeast1-a"       # 使用するGCPゾーン
+github_repo_owner = "your-github-username"    # GitHubユーザー名またはOrganization名
+github_repo_name  = "your-repository-name"    # リポジトリ名
